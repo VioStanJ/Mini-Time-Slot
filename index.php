@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="cal/jquery.datetimepicker.min.css"/>
-    <script type="text/javascript" src="cal/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="cal/jquery.datetimepicker.min.js"></script>
-    <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- END -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <style type="text/css">
         @font-face
         {
@@ -48,14 +47,14 @@
     <div id="wrapper">
     	<br><br>
         <!-- Div de la date picker -->
-        <div id="demo2"></div>
+        <div  class="date-picker-2" placeholder="Recipient's username" id="demo2" aria-describedby="basic-addon2"></div>
         <br>
         <!-- Input prenant l'heure selectionner  -->
         <input type="text" name="heureRdzVs" id="heureRdzVs" class="text-center">
         <style type="text/css">
             .prpo{
                 width: 200px;
-                height: 280px;
+                height: 210px;
                 border: 1px solid gray;
                 position: absolute;
                 display: none;
@@ -73,12 +72,18 @@
                 margin-left: -2px;
                 margin-right: -2px;
             }
+            #hdPP{
+                margin-top: -15px;
+            }
+            #hdPP0{
+                margin-bottom: -10px;
+            }
         </style>
         <div class="prpo">
             <div class="container-fluid">
-                <h4 class="text-center">Heures Disponibles</h4>
+                <h4 id="hdPP0" class="text-center">Heures Disponibles</h4>
                 <hr>
-                <p>Rendez-vous disponible pour <strong id="dateProp"></strong></p>
+                <p id="hdPP">Rendez-vous disponible pour <strong id="dateProp"></strong></p>
             </div>
             <!-- La class fllbtn doit etre inclut pour les evenements dans le modal -->
             <div class="container-fluid">
@@ -91,23 +96,14 @@
     <script type="text/javascript">
         $(document).ready(function(){
 
-            $('#demo2').datetimepicker({
-                date: new Date(),
-                viewMode: 'YMD',
-                onDateChange: function(){
-                    $('#dateProp').text(this.getText('YYYY-MM-DD'));
+            $('#demo2').datepicker({
+                onSelect: function(dateText) { 
+                    $('#dateProp').text(dateText);
                     var pos = $('#demo2').position();
                     $('#heureRdzVs').val("");
                     $('.prpo').css("top",pos.top);
                     $('.prpo').css("left",pos.left - 200);
                     $('.prpo').show(200);  
-                },
-                onClear: function(){
-                    $('.prpo').hide(200);
-                },
-                onOk : function(){
-                    $('.prpo').hide(200);
-                    alert('Sending.....');
                 }
             });
             /*En cliquant sur un bouton du modal , on recupere le texte et on l'ajoute dans l'input*/
