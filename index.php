@@ -50,7 +50,7 @@
         <div  class="date-picker-2" placeholder="Recipient's username" id="demo2" aria-describedby="basic-addon2"></div>
         <br>
         <!-- Input prenant l'heure selectionner  -->
-        <input type="text" name="heureRdzVs" id="heureRdzVs" class="text-center">
+        <p type="text" name="heureRdzVs" id="heureRdzVs" class="text-center"></p>
         <style type="text/css">
             .prpo{
                 width: 200px;
@@ -81,41 +81,64 @@
         </style>
         <div class="prpo">
             <div class="container-fluid">
+                <div>fermer</div>
                 <h4 id="hdPP0" class="text-center">Heures Disponibles</h4>
                 <hr>
                 <p id="hdPP">Rendez-vous disponible pour <strong id="dateProp"></strong></p>
             </div>
             <!-- La class fllbtn doit etre inclut pour les evenements dans le modal -->
-            <div class="container-fluid">
-                <button  class="btn btn-success fllbtn">8:00 AM – 9:00 AM</button>
-                <br><button  class="btn btn-success fllbtn">10:00 AM – 12:00 PM</button>
-                <br><button  class="btn btn-success fllbtn">12:00 PM – 2:00 PM</button>
+            <div class="container-fluid" id="btnFullDispo">
+                <button  class="btn btn-default fllbtn">8:00 AM – 9:00 AM</button>
             </div>
         </div>
     </div>
     <script type="text/javascript">
         $(document).ready(function(){
 
+            var dt;
             $('#demo2').datepicker({
                 onSelect: function(dateText) { 
                     $('#dateProp').text(dateText);
+                    dt = dateText;
                     var pos = $('#demo2').position();
                     $('#heureRdzVs').val("");
                     $('.prpo').css("top",pos.top);
                     $('.prpo').css("left",pos.left - 200);
-                    $('.prpo').show(200);  
+                    $('.prpo').show(200); 
+                    $.ajax({
+                        url : "post.php",
+                        method : "POST",
+                        data:{sendDate:dateText},
+                        success: function(data){
+                            $('#btnFullDispo').empty();
+                            $.each(data.hDispo,function(key,val){
+                                /*console.log(val);*/
+                                $('#btnFullDispo').append('<button  class="btn btn-default fllbtn">'+val+'</button><br>');
+                            });
+                            $('.fllbtn').on('click',function(e){
+                                var h = $(this).text()
+                                $('.prpo').hide(200);
+                                $.ajax({
+                                    url : "post.php",
+                                    method : "POST",
+                                    data:{date:dt,heure:h},
+                                    success: function(data){
+                                        $('#heureRdzVs').text(data.msj);
+                                        console.log(data);
+                                    }
+                                });
+                            });
+                        }
+                    }); 
                 }
             });
             /*En cliquant sur un bouton du modal , on recupere le texte et on l'ajoute dans l'input*/
-            $('.fllbtn').on('click',function(e){
-                    $('#heureRdzVs').val($(this).text());
-                    $('.prpo').hide(200);
-                });
+            
 
             $(window).resize(function(){
                 var pos = $('#demo2').position();
-                    $('.prpo').css("top",pos.top);
-                    $('.prpo').css("left",pos.left - 200);
+                $('.prpo').css("top",pos.top);
+                $('.prpo').css("left",pos.left - 200);
             });
         });
     </script>
