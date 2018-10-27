@@ -81,7 +81,9 @@
         </style>
         <div class="prpo">
             <div class="container-fluid">
-                <div>fermer</div>
+                <button type="button" class="close" aria-label="Close" id="closePrpo">
+                  <span aria-hidden="true">&times;</span>
+                </button>
                 <h4 id="hdPP0" class="text-center">Heures Disponibles</h4>
                 <hr>
                 <p id="hdPP">Rendez-vous disponible pour <strong id="dateProp"></strong></p>
@@ -104,7 +106,7 @@
                     $('#heureRdzVs').val("");
                     $('.prpo').css("top",pos.top);
                     $('.prpo').css("left",pos.left - 200);
-                    $('.prpo').show(200); 
+                    $('.prpo').show("slide", { direction: "right" }, 400); 
                     $.ajax({
                         url : "post.php",
                         method : "POST",
@@ -116,8 +118,8 @@
                                 $('#btnFullDispo').append('<button  class="btn btn-default fllbtn">'+val+'</button><br>');
                             });
                             $('.fllbtn').on('click',function(e){
-                                var h = $(this).text()
-                                $('.prpo').hide(200);
+                                var h = $(this).text();
+                                $('.prpo').hide("slide", { direction: "right" }, 400); 
                                 $.ajax({
                                     url : "post.php",
                                     method : "POST",
@@ -134,6 +136,9 @@
             });
             /*En cliquant sur un bouton du modal , on recupere le texte et on l'ajoute dans l'input*/
             
+            $('#closePrpo').click(function(e){
+                $('.prpo').hide("slide", { direction: "right" }, 400); 
+            });
 
             $(window).resize(function(){
                 var pos = $('#demo2').position();
